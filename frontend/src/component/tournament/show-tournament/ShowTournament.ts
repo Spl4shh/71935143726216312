@@ -69,7 +69,6 @@ export function showTournamentScript() {
                   }
             }
 
-            // TODO ne fonctionne pas vraiment
             fetchTeamsRanking();
       }
 

@@ -38,7 +38,7 @@ export class MatchService {
             }
       }
 
-      updateScore(match: Match, matchUpdatedScore: Match) {
+      async updateScore(match: Match, matchUpdatedScore: Match) {
             if ((matchUpdatedScore.scoreA ?? 0) < 0 || (matchUpdatedScore.scoreB ?? 0) < 0) {
                 throw new Error("Scores must be positive numbers");
             }
@@ -46,6 +46,6 @@ export class MatchService {
             match.scoreA = matchUpdatedScore.scoreA;
             match.scoreB = matchUpdatedScore.scoreB;
 
-            this.saveMatch(match)
+            await this.saveMatch(match)
       }
 }

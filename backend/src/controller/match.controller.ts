@@ -17,7 +17,7 @@ export class MatchController {
 
       @Patch(':id')
       async updateScore(@Param('id') id: number, @Body() matchDto: MatchDto) {
-            this.matchService.updateScore(await this.matchService.getMatch(id),
+            await this.matchService.updateScore(await this.matchService.getMatch(id),
                                           this.matchMapper.toMatch(matchDto));
       }
 }
