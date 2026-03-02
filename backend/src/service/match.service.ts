@@ -9,9 +9,9 @@ export class MatchService {
             private matchRepo: Repository<Match>,
       ) {}
 
-      public saveMatch(match: Match): void {
+      public async saveMatch(match: Match): Promise<void> {
         	try {
-			this.matchRepo.save(match);
+			await this.matchRepo.save(match);
 		} catch (error) {
 			throw new Error(`Error saving match: ${error.message}`);
 		}

@@ -45,12 +45,14 @@ export class TournamentController {
       @Post(':id/generate-matches')
       async generateMatches(@Param('id') id: number) {
             const tournament = await this.tournamentService.getTournament(id);
-            this.tournamentService.generateMatches(tournament);
+            await this.tournamentService.generateMatches(tournament);
       }
 
-      @Post(':id/teams')
-      async addTeamsToTournament(@Param('id') id: number, @Body() teams: TeamDto[]) {
-            this.tournamentService.setTeamsOfTournament(await this.tournamentService.getTournament(id),
-                                                        teams.map(teamDto => this.teamMapper.toTeam(teamDto)));
+      @Post(':id/add-team')
+      async addTeamToTournament(@Param('id') id: number, @Body() team: TeamDto) {
+            await this.tournamentService.addTeamToTournament(await this.tournamentService.getTournament(id),
+                                                       this.teamMapper.toTeam(team));
+
+            return this.tournamentMapper.toTournamentDto(await this.tournamentService.getTournament(id));
       }
 }     

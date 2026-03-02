@@ -15,14 +15,16 @@ export class TournamentMapper {
 
       toTournamentDto(tournament: Tournament): TournamentDto {
             const tournamentDto = new TournamentDto();
+            console.log(tournamentDto);
 
+            
             tournamentDto.id = tournament.id;
-            tournamentDto.name = tournament.name;
-            tournamentDto.date = tournament.date.toISOString();
+            tournamentDto.name = tournament.name;   
+            tournamentDto.date = new Date(tournament.date).toISOString();
             tournamentDto.description = tournament.description;
             tournamentDto.teams = tournament.teams?.map(team => this.teamMapper.toTeamDto(team));
             tournamentDto.matches = tournament.matches?.map(match => this.matchMapper.toMatchDto(match));
-
+            
             return tournamentDto;
       }
 

@@ -19,7 +19,7 @@ const {
                               <v-text-field v-model="tournament.name" label="Nom du tournoi"
                                     :rules="[v => !!v || 'Champ requis']" />
 
-                              <v-text-field v-model="tournament.date" label="Date du tournoi" type="date"
+                              <v-text-field v-model="tournament.date" label="Date du tournoi" type="datetime-local"
                                     :rules="[v => !!v || 'Champ requis']" />
 
                               <v-textarea v-model="tournament.description" label="Description du tournoi"

@@ -5,6 +5,7 @@ import { Team } from "src/model/team.model";
 import { Tournament } from "src/model/tournament.model";
 import { Repository } from "typeorm";
 import { TeamService } from "./team.service";
+import { User } from "src/model/user.model";
 
 @Injectable()
 export class TournamentService {
@@ -21,9 +22,9 @@ export class TournamentService {
 	 * @param tournament 
 	 * @returns 
 	 */
-	public saveTournament(tournament: Tournament) {
+	public async saveTournament(tournament: Tournament) {
 		try {
-			this.tournamentRepo.save(tournament);
+			await this.tournamentRepo.save(tournament);
 		} catch (error) {
 			throw new Error(`Error saving tournament: ${error.message}`);
 		}
@@ -74,9 +75,9 @@ export class TournamentService {
 
 		for (const match of tournament.matches) {
 			const pointA = points.get(match.aTeam.id!)!;
-			const pointB = points.get(match.bTeam .id!)!;
+			const pointB = points.get(match.bTeam.id!)!;
 
-			if (match.scoreA !== undefined && match.scoreB !== undefined) {
+			if ((match.scoreA !== undefined && match.scoreA !== null) && match.scoreB !== undefined && match.scoreB !== null) {
 				if (match.scoreA > match.scoreB) {
 					pointA.points += 3;
 				} else if (match.scoreA < match.scoreB) {
@@ -99,12 +100,13 @@ export class TournamentService {
 	 * @return The tournament with the generated matches.
 	 * @throws Error if the tournament has less than 2 teams.
 	 */
-	public generateMatches(tournament: Tournament): Tournament {
+	public async generateMatches(tournament: Tournament): Promise<Tournament> {
 		const teams = tournament.teams;
 		tournament.matches = [];
 
 		if (teams.length < 2) {
-			throw new Error("At least 2 teams are required to generate matches");
+			console.error("Cannot generate matches for tournament with less than 2 teams");
+			//throw new Error("At least 2 teams are required to generate matches");
 		}
 
 		for (let i = 0; i < teams.length; i++) {
@@ -115,9 +117,9 @@ export class TournamentService {
 			}
 		}
 
-		this.saveTournament(tournament);
+		await this.saveTournament(tournament);
 
-		return tournament;
+		return await this.getTournament(tournament.id!);
 	}
 
 	/**
@@ -146,6 +148,36 @@ export class TournamentService {
 			}
 		}
 
-		this.saveTournament(tournament);
+		await this.saveTournament(tournament);
 	}
+
+		/**
+	 * Définir la liste des équipe d'un tournoi.
+	 * Supprime les anciennes équipes
+	 * 
+	 * @param tournament Le tournoi qui va accueillir la liste d'équipe
+	 * @param team La {@link Team} à ajouter au tournoi
+	 * @throws Error si une équipe n'existe pas ou si une équipe a déjà été ajoutée au tournoi
+	 */
+	public async addTeamToTournament(tournament: Tournament, team: Team) {
+		if (!team.id) {
+			// TODO en fonction de la gestion coté front, remplacer cette ligne par un save
+			let teamToAdd : Team|null = await this.teamService.getTeamByName(team.name);
+
+			if (!teamToAdd) {
+				console.log(`Team ${team.name} does not exist, creating it`);
+				teamToAdd = team;
+			}
+
+			tournament.addTeam(teamToAdd);
+		} else {
+			tournament.addTeam(team);
+		}
+
+		await this.saveTournament(tournament);
+
+		// On regénère les matchs pour prendre en compte la nouvelle équipe
+		await this.generateMatches(await this.getTournament(tournament.id!));
+	}
+
 }

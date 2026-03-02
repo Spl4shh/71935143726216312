@@ -1,7 +1,7 @@
 import { TeamDto } from "./team.dto";
 
 export class MatchDto {
-      public id: number;
+      public id?: number;
 
       public aTeam: TeamDto;
 

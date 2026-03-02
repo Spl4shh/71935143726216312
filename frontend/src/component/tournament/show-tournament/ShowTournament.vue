@@ -3,8 +3,8 @@ import { showTournamentScript } from "@/component/tournament/show-tournament/Sho
 import { dateFormater } from "@/utils/date-formater.utils";
 
 const {
-  teamsRanking, tournament,
-  goToTournaments, generateMatches, updateMatches
+  newTeam, teamsRanking, tournament,
+  addTeam, goToTournaments, generateMatches, updateMatches
 } = showTournamentScript();
 const { formatDate } = dateFormater();
 </script>
@@ -34,6 +34,16 @@ const { formatDate } = dateFormater();
     <!-- Équipes -->
     <v-card class="mt-4">
       <v-card-title>Équipes</v-card-title>
+      <div class="ml-4 d-flex align-center">
+        <v-text-field v-model="newTeam.name" 
+                      density="compact" 
+                      variant="outlined"
+                      hide-details 
+                      style="max-width: 200px" />
+        <v-btn color="primary" class="ml-4 mb-4 mt-4" @click="addTeam">
+          Ajouter l'équipe
+        </v-btn>
+      </div>
 
       <v-list v-if="tournament.teams.length > 0">
         <v-list-item v-for="team in tournament.teams" :key="team.id">

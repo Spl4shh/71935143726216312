@@ -20,6 +20,9 @@ export function createTournamentScript() {
             error.value = null
 
             try {
+                  console.log("on essai de creer ");
+                  
+                  
                   const response = await fetch("http://localhost:8081/api/tournaments", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
