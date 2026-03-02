@@ -38,8 +38,8 @@ export class TournamentController {
       }
 
       @Post()
-      createTournament(@Body() tournamentDto: TournamentDto) {
-            this.tournamentService.saveTournament(this.tournamentMapper.toTournament(tournamentDto));
+      async createTournament(@Body() tournamentDto: TournamentDto) {
+            return await this.tournamentService.saveTournament(this.tournamentMapper.toTournament(tournamentDto));
       }
 
       @Post(':id/generate-matches')

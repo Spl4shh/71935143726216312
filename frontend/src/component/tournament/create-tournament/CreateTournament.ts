@@ -1,4 +1,5 @@
 import { TournamentMapper } from "@/dto/mapper/tournament.mapper"
+import { TournamentDto } from "@/dto/tournament.dto"
 import { Tournament } from "@/model/tournament.model"
 import { router } from "@/router"
 import { inject, ref } from "vue"
@@ -29,12 +30,15 @@ export function createTournamentScript() {
                         body: JSON.stringify(tournamentMapper.toTournamentDto(tournament.value))
                   })
 
+                  
                   if (!response.ok) {
                         alert("Erreur lors de la création du tournoi")
                         throw new Error("Erreur API")
                   } else {
-                        // recuperer le tournoi créé pour rediriger vers sa page de détail
-                        router.push("/tournaments") 
+                        const tournamentDto = await response.json() as TournamentDto;
+                        tournament.value = tournamentMapper.toTournament(tournamentDto);
+
+                        router.push("/tournaments/" + tournament.value.id) 
                   }
 
                   reset()

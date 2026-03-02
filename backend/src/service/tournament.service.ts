@@ -22,9 +22,9 @@ export class TournamentService {
 	 * @param tournament 
 	 * @returns 
 	 */
-	public async saveTournament(tournament: Tournament) {
+	public async saveTournament(tournament: Tournament): Promise<Tournament> {
 		try {
-			await this.tournamentRepo.save(tournament);
+			return await this.tournamentRepo.save(tournament);
 		} catch (error) {
 			throw new Error(`Error saving tournament: ${error.message}`);
 		}
