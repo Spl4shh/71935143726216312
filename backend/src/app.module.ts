@@ -14,6 +14,9 @@ import { MatchController } from './controller/match.controller';
 import { MatchService } from './service/match.service';
 import { TeamService } from './service/team.service';
 import { TeamController } from './controller/team.controller';
+import { UserController } from './controller/user.controller';
+import { UserMapper } from './controller/dto/mapper/user.mapper';
+import { UserService } from './service/user.service';
 
 @Module({
 	imports: [
@@ -42,14 +45,18 @@ import { TeamController } from './controller/team.controller';
 	controllers: [
 		MatchController,
 		TeamController,
-		TournamentController],
+		TournamentController,
+		UserController
+	],
 	providers: [
 		MatchMapper,
 		TeamMapper,
 		TournamentMapper, 
+		UserMapper,
 		MatchService,
 		TeamService,
-		TournamentService
+		TournamentService,
+		UserService
 	],
 })
 export class AppModule { }
