@@ -12,7 +12,7 @@ export class UserController {
                   private userMapper: UserMapper) {}
 
       // endpoint utile uniquement dans ce test technique, en l'abscence d'un fournisseur d'identité 
-      @Post("login")
+      @Public()
       @Post()
       async createUser(@Body() userDto: UserDto) {
             return this.userMapper.toUserDto(await this.userService.saveUser(this.userMapper.toUser(userDto)));

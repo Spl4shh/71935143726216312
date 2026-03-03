@@ -4,7 +4,7 @@ import { TournamentMapper } from "@/dto/mapper/tournament.mapper";
 import { TournamentDto } from "@/dto/tournament.dto";
 import { Team } from "@/model/team.model";
 import { Tournament } from "@/model/tournament.model";
-import { router } from "@/router"
+import { router } from "@/router/router"
 import { inject, onMounted, ref } from "vue";
 
 export function showTournamentScript() {
@@ -22,7 +22,11 @@ export function showTournamentScript() {
 
       async function fetchTournament() {
             const response = await fetch(`http://localhost:8081/api/tournaments/${tournamentId}`, {
-                  method: "GET"
+                  method: "GET",
+                  headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                  },
             });
 
             if (!response.ok) {
@@ -36,7 +40,11 @@ export function showTournamentScript() {
 
       async function generateMatches() {
             const response = await fetch(`http://localhost:8081/api/tournaments/${tournamentId}/generate-matches`, {
-                  method: "POST"
+                  method: "POST",
+                  headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                  },
             });
 
             if (response.ok) {
@@ -47,7 +55,11 @@ export function showTournamentScript() {
 
       function fetchTeamsRanking() {
             fetch(`http://localhost:8081/api/tournaments/${tournamentId}/ranking`, {
-                  method: "GET"
+                  method: "GET",
+                  headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                  },
             }).then(async response => await response.json() as { team: Team, points: number }[])
                   .then(teamsRankingData => {
                         teamsRanking.value = teamsRankingData;
@@ -59,7 +71,10 @@ export function showTournamentScript() {
                   if (match.scoreA !== null && match.scoreB !== null) {
                         const response = await fetch(`http://localhost:8081/api/matches/${match.id}`, {
                               method: "PATCH",
-                              headers: { "Content-Type": "application/json" },
+                              headers: { 
+                                    "Content-Type": "application/json",
+                                    "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                              },
                               body: JSON.stringify(matchMapper.toMatchDto(match))
                         });
 
@@ -77,7 +92,10 @@ export function showTournamentScript() {
                   `http://localhost:8081/api/tournaments/${tournamentId}/add-team`,
                   {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { 
+                              "Content-Type": "application/json",
+                              "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                        },
                         body: JSON.stringify(teamMapper.toTeamDto(newTeam.value))
                   }
             );

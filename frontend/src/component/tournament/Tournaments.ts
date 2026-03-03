@@ -18,7 +18,10 @@ export function tournamentsScript() {
       async function fetchTournament() {
             const response = await fetch("http://localhost:8081/api/tournaments", {
                   method: "GET",
-                  headers: { "Content-Type": "application/json" },
+                  headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                  },
             })
 
             const tournamentsFetched = await response.json() as TournamentDto[]

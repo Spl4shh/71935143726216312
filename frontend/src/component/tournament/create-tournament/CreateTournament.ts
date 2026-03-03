@@ -1,7 +1,7 @@
 import { TournamentMapper } from "@/dto/mapper/tournament.mapper"
 import { TournamentDto } from "@/dto/tournament.dto"
 import { Tournament } from "@/model/tournament.model"
-import { router } from "@/router"
+import { router } from "@/router/router"
 import { inject, ref } from "vue"
 
 export function createTournamentScript() {
@@ -26,7 +26,10 @@ export function createTournamentScript() {
                   
                   const response = await fetch("http://localhost:8081/api/tournaments", {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { 
+                              "Content-Type": "application/json",
+                              "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
+                        },
                         body: JSON.stringify(tournamentMapper.toTournamentDto(tournament.value))
                   })
 
