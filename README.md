@@ -44,12 +44,16 @@ npm run dev
 ```
 ## Techno utilisées
 
-Node (NestJS), Vue3, Docker
+Node (NestJS), Vue3, Vuetify Docker
 
 ## Utilisation locale
 ### Création utilisateur
 
 Pour créer des utilisateurs, vous pourrez faire un appel au endpoint `localhost:8081/api/users` en POST avec ce JSON 
 ```JSON
-
+{
+    "username": "Romain",
+    "password": "NATANELIC",
+    "isAdmin": false
+}
 ```
