@@ -2,6 +2,7 @@ import { Type } from "class-transformer";
 import { IsDate } from "class-validator";
 import { TeamDto } from "./team.dto";
 import { MatchDto } from "./match.dto";
+import { UserDto } from "./user.dto";
 
 export class TournamentDto {
       
@@ -14,6 +15,8 @@ export class TournamentDto {
       public date: Date;
       
       public description?: string;
+
+      public creator: UserDto
 
       public teams: TeamDto[];
 

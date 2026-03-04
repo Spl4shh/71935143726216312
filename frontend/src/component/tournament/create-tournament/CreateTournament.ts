@@ -1,4 +1,6 @@
+import { UserDto } from "@/dto/user.dto"
 import { Tournament } from "@/model/tournament.model"
+import { User } from "@/model/user.model"
 import { TournamentRequest } from "@/request/tournament.request"
 import { router } from "@/router/router"
 import { inject, ref } from "vue"
@@ -10,6 +12,7 @@ export function createTournamentScript() {
             name: "",
             date: new Date(),
             description: "",
+            creator: JSON.parse(sessionStorage.getItem("userLogged")) as User
       })
 
       const loading = ref(false)

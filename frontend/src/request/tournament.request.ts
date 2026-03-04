@@ -44,7 +44,7 @@ export class TournamentRequest {
             return tournamentsFetched.map(tournament => this.tournamentMapper.toTournament(tournament));
       }      
 
-      public async createTournament(tournament: Tournament) {
+      public async createTournament(tournament: Tournament) {            
             const response = await fetch("http://localhost:8081/api/tournaments", {
                   method: "POST",
                   headers: {

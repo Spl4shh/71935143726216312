@@ -7,6 +7,7 @@ export function loginScript() {
       const userRequest = inject('userRequest') as UserRequest
 
       const user = ref<User>({
+            id: undefined,
             username: "",
             password: "",
             isAdmin: false,
@@ -20,7 +21,8 @@ export function loginScript() {
 
                   const credentials = btoa(`${userLogged.username}:${userLogged.password}`);
                   sessionStorage.setItem("basicAuth", credentials);
-
+                  sessionStorage.setItem("userLogged", JSON.stringify(userLogged));
+                  
                   router.replace("/tournaments");
             } 
             catch (e: any) {

@@ -11,7 +11,7 @@ export function appRun() {
   const userMapper = new UserMapper()
   const teamMapper = new TeamMapper()
   const matchMapper = new MatchMapper(teamMapper)
-  const tournamentMapper = new TournamentMapper(teamMapper, matchMapper)
+  const tournamentMapper = new TournamentMapper(teamMapper, matchMapper, userMapper)
 
   const userRequest = new UserRequest(userMapper);
   const tournamentRequest = new TournamentRequest(tournamentMapper, teamMapper);
