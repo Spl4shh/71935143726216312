@@ -1,12 +1,11 @@
-import { TournamentMapper } from "@/dto/mapper/tournament.mapper"
-import { TournamentDto } from "@/dto/tournament.dto"
 import { Tournament } from "@/model/tournament.model"
+import { TournamentRequest } from "@/request/tournament.request"
 import { router } from "@/router/router"
 import { inject, ref } from "vue"
 
 export function createTournamentScript() {
-      const tournamentMapper = inject('tournamentMapper') as TournamentMapper
-      
+      const tournamentRequest = inject('tournamentRequest') as TournamentRequest
+
       const tournament = ref<Tournament>({
             name: "",
             date: new Date(),
@@ -20,31 +19,9 @@ export function createTournamentScript() {
             loading.value = true
             error.value = null
 
-            try {
-                  console.log("on essai de creer ");
-                  
-                  
-                  const response = await fetch("http://localhost:8081/api/tournaments", {
-                        method: "POST",
-                        headers: { 
-                              "Content-Type": "application/json",
-                              "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
-                        },
-                        body: JSON.stringify(tournamentMapper.toTournamentDto(tournament.value))
-                  })
-
-                  
-                  if (!response.ok) {
-                        alert("Erreur lors de la création du tournoi")
-                        throw new Error("Erreur API")
-                  } else {
-                        const tournamentDto = await response.json() as TournamentDto;
-                        tournament.value = tournamentMapper.toTournament(tournamentDto);
-
-                        router.push("/tournaments/" + tournament.value.id) 
-                  }
-
-                  reset()
+            try { 
+                  tournament.value = await tournamentRequest.createTournament(tournament.value);;
+                  router.push("/tournaments/" + tournament.value.id) 
             } catch (e: any) {
                   error.value = e.message
             } finally {
@@ -54,14 +31,6 @@ export function createTournamentScript() {
 
       function goToTournaments() {
             router.push("/tournaments")
-      }
-
-      function reset() {
-            tournament.value = {
-                  name: "",
-                  date: new Date(),
-                  description: "",
-            }
       }
 
       return {

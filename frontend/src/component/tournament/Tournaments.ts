@@ -1,11 +1,10 @@
-import { TournamentMapper } from "@/dto/mapper/tournament.mapper"
-import { TournamentDto } from "@/dto/tournament.dto"
+import { TournamentRequest } from "@/request/tournament.request"
 import { inject, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 
 export function tournamentsScript() {
       const router = useRouter()
-      const tournamentMapper = inject('tournamentMapper') as TournamentMapper
+      const tournamentRequest = inject('tournamentRequest') as TournamentRequest
       const tournaments = ref([])
       const tabHeader = [
             { title: "Nom", key: "name" },
@@ -16,17 +15,7 @@ export function tournamentsScript() {
 
 
       async function fetchTournament() {
-            const response = await fetch("http://localhost:8081/api/tournaments", {
-                  method: "GET",
-                  headers: { 
-                        "Content-Type": "application/json",
-                        "Authorization" : "Basic " + sessionStorage.getItem("basicAuth") 
-                  },
-            })
-
-            const tournamentsFetched = await response.json() as TournamentDto[]
-
-            tournaments.value = tournamentsFetched.map(tournament => tournamentMapper.toTournament(tournament))
+            tournaments.value = await tournamentRequest.getTournaments();
       }
 
       function goToCreateTournament() {
@@ -37,7 +26,6 @@ export function tournamentsScript() {
             return new Date(date).toLocaleDateString("fr-FR")
       }
 
-      // onMonted permet charger les données au montage
       onMounted(fetchTournament);
 
       return {

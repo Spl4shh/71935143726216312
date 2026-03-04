@@ -1,14 +1,11 @@
-import { TournamentMapper } from "@/dto/mapper/tournament.mapper"
-import { UserMapper } from "@/dto/mapper/user.mapper"
-import { TournamentDto } from "@/dto/tournament.dto"
 import { User } from "@/model/user.model"
+import { UserRequest } from "@/request/user.request"
 import { router } from "@/router/router"
 import { inject, onMounted, ref } from "vue"
-import { useRouter } from "vue-router"
 
 export function loginScript() {
-      const userMapper = inject('userMapper') as UserMapper
-      
+      const userRequest = inject('userRequest') as UserRequest
+
       const user = ref<User>({
             username: "",
             password: "",
@@ -19,17 +16,9 @@ export function loginScript() {
 
       async function login() {
             try{
-                  const response = await fetch("http://localhost:8081/api/users/login", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(userMapper.toUserDto(user.value))
-                  });
+                  let userLogged = await userRequest.login(user.value);
 
-                  if (!response.ok) {
-                        throw new Error("Bad credentials");
-                  }
-
-                  const credentials = btoa(`${user.value.username}:${user.value. password}`);
+                  const credentials = btoa(`${userLogged.username}:${userLogged.password}`);
                   sessionStorage.setItem("basicAuth", credentials);
 
                   router.replace("/tournaments");
